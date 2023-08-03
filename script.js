@@ -1,7 +1,9 @@
 const userScore = document.getElementById('userScore');
 const machineScore = document.getElementById('machineScore');
+const round = document.getElementById('round');
 let uScore = 0
 let mScore = 0 
+let gameStatus = true
 
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -27,11 +29,6 @@ function getComputerChoice () {
     return choices[random(3)]
 }
 
-function playerChoice () {
-    let userChoice = prompt("Pick 'rock', 'paper' or 'scissor'")
-    let user = userChoice.toLocaleUpperCase()
-    return user
-}
 
 function updateScores (winner) {
     if (winner === "user"){
@@ -45,11 +42,31 @@ function updateScores (winner) {
 
     if (uScore === 5) {
         alert("YOU WIN")
-        resetScore()
+        userScore.style.color = 'green'
+        machineScore.style.color = 'red'
+        gameStatus = false
     }
     else if (mScore === 5) {
+        
         alert("YOU LOSE")
-        resetScore()
+        userScore.style.color = 'red'
+        machineScore.style.color = 'green'
+        gameStatus = false
+    }
+}
+
+function updateRound (winner) {
+    if (winner === 'user'){
+        round.innerText = 'YOU WIN THIS ROUND!'
+        round.style.color = 'green'
+    }
+    else if (winner === 'machine') {
+        round.innerText = 'YOU LOSE THIS ROUND!'
+        round.style.color = 'red'
+    }
+    else {
+        round.innerText = 'DRAW'
+        round.removeAttribute('style')
     }
 }
 
@@ -58,10 +75,14 @@ function resetScore () {
     mScore = 0
     userScore.innerText = uScore
     machineScore.innerText = mScore
-
+    gameStatus = true
+    userScore.removeAttribute('style')
+    machineScore.removeAttribute('style')
+    round.innerText = ""
 }
 
 function play(e){
+if (gameStatus) {    
     let user = e.target.innerText;
     let machine = getComputerChoice()
 
@@ -70,8 +91,9 @@ function play(e){
     console.log(machine)
     // switch ()
     if (user === machine) {
-        console.log("Drawn, you both picked: " + user)
-        console.log("DRAWN!")
+        console.log("Draw, you both picked: " + user)
+        console.log("DRAW!")
+        updateRound()
     }
     else {
         switch (user) {
@@ -80,10 +102,12 @@ function play(e){
                     case "PAPER":
                         console.log("You lose! " + machine + " beats " + user + "!")
                         updateScores("machine")
+                        updateRound("machine")
                         break;
                     case "SCISSOR":
                         console.log("You win! " + user + " beats " + machine + "!")
                         updateScores("user")
+                        updateRound("user")
                         break;
                 }
             break;
@@ -93,10 +117,12 @@ function play(e){
                     case "SCISSOR":
                         console.log("You lose! " + machine + " beats " + user + "!")
                         updateScores("machine")
+                        updateRound("machine")
                         break;
                     case "ROCK":
                         console.log("You win! " + user + " beats " + machine + "!")
                         updateScores("user")
+                        updateRound("user")
                         break;
                 }
             break;
@@ -106,16 +132,19 @@ function play(e){
                     case "ROCK":
                         console.log("You lose! " + machine + " beats " + user + "!")
                         updateScores("machine")
+                        updateRound("machine")
                         break;
                     case "PAPER":
                         console.log("You win! " + user + " beats " + machine + "!")
                         updateScores("user")
+                        updateRounds("user")
                         break;
                 }
             break;
 
         }
     }
+}
 }
 
 

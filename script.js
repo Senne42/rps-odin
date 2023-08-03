@@ -1,3 +1,23 @@
+const userScore = document.getElementById('userScore');
+const machineScore = document.getElementById('machineScore');
+let uScore = 0
+let mScore = 0 
+
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    const rock = document.getElementById('buttonRock')    
+    rock.onclick = function(e){play(e)}
+    
+    const paper = document.getElementById('buttonPaper')    
+    paper.onclick = function(e){play(e)}
+    
+    const scissor = document.getElementById('buttonScissor')    
+    scissor.onclick = function(e){play(e)}
+
+});
+
+
 function random (num = 3) {
     return Math.floor(Math.random() * num)
 }
@@ -13,16 +33,45 @@ function playerChoice () {
     return user
 }
 
-function play(){
-    let user = playerChoice()
+function updateScores (winner) {
+    if (winner === "user"){
+        uScore++
+        userScore.innerText = uScore
+    }
+    else {
+        mScore++
+        machineScore.innerText = mScore
+    }
+
+    if (uScore === 5) {
+        alert("YOU WIN")
+        resetScore()
+    }
+    else if (mScore === 5) {
+        alert("YOU LOSE")
+        resetScore()
+    }
+}
+
+function resetScore () {
+    uScore = 0
+    mScore = 0
+    userScore.innerText = uScore
+    machineScore.innerText = mScore
+
+}
+
+function play(e){
+    let user = e.target.innerText;
     let machine = getComputerChoice()
+
 
     console.log(user)
     console.log(machine)
     // switch ()
     if (user === machine) {
         console.log("Drawn, you both picked: " + user)
-        return "drawn"
+        console.log("DRAWN!")
     }
     else {
         switch (user) {
@@ -30,10 +79,11 @@ function play(){
                 switch (machine) {
                     case "PAPER":
                         console.log("You lose! " + machine + " beats " + user + "!")
+                        updateScores("machine")
                         break;
                     case "SCISSOR":
                         console.log("You win! " + user + " beats " + machine + "!")
-                        return "user"
+                        updateScores("user")
                         break;
                 }
             break;
@@ -42,10 +92,11 @@ function play(){
                 switch (machine) {
                     case "SCISSOR":
                         console.log("You lose! " + machine + " beats " + user + "!")
+                        updateScores("machine")
                         break;
                     case "ROCK":
                         console.log("You win! " + user + " beats " + machine + "!")
-                        return "user"
+                        updateScores("user")
                         break;
                 }
             break;
@@ -54,43 +105,17 @@ function play(){
                 switch (machine) {
                     case "ROCK":
                         console.log("You lose! " + machine + " beats " + user + "!")
+                        updateScores("machine")
                         break;
                     case "PAPER":
                         console.log("You win! " + user + " beats " + machine + "!")
-                        return "user"
+                        updateScores("user")
                         break;
                 }
             break;
 
         }
     }
-}
-
-function startGame () {
-    let rounds = prompt("How many rounds you wanna play: ")
-    let machineScore = 0
-    let userScore = 0
-    for (let a=1; a <= rounds; a++) {
-        let result = play()
-        if (result === "user" && result != "drawn"){
-            userScore++
-        }
-        else if (result === "drawn"){
-            console.log("DRAWN")
-         }
-        else{
-            machineScore++
-        }
-    }
-
-
-    if (userScore > machineScore){
-        console.log("Cheers mate! You win!")
-    }
-    else if (userScore === machineScore){
-        console.log("DRAWN!")
-    }
-    else {console.log("Sorry mate, you are lame!")}
 }
 
 
